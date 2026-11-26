@@ -1,0 +1,84 @@
+<div class="dashboard-shell">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-kicker">Campus</span>
+      <h1>ReUse Campus</h1>
+    </div>
+
+    <div class="session-panel">
+      @if (auth.usuarioActual(); as user) {
+        <div class="user-meta">
+          <span class="user-name">{{ user.nombre }}</span>
+          <span class="user-role">{{ user.rol }}</span>
+        </div>
+
+        <span
+          class="status-pill"
+          [class.pill-active]="user.estado === 'ACTIVO'"
+          [class.pill-blocked]="user.estado !== 'ACTIVO'"
+        >
+          {{ user.estado }}
+        </span>
+
+        <button type="button" class="btn btn-outline" (click)="cerrarSesion()">
+          Cerrar sesión
+        </button>
+      }
+    </div>
+  </header>
+
+  @if (alerta(); as msg) {
+    <div
+      class="alert"
+      [class.alert-ok]="msg.tipo === 'ok'"
+      [class.alert-error]="msg.tipo === 'error'"
+    >
+      {{ msg.texto }}
+    </div>
+  }
+
+  <nav class="tab-bar">
+    <button
+      type="button"
+      class="tab-btn"
+      [class.is-active]="tabActiva() === 'catalogo'"
+      (click)="tabActiva.set('catalogo')"
+    >
+      Catálogo
+    </button>
+    <button
+      type="button"
+      class="tab-btn"
+      [class.is-active]="tabActiva() === 'solicitudes'"
+      (click)="tabActiva.set('solicitudes')"
+    >
+      Solicitudes
+    </button>
+    <button
+      type="button"
+      class="tab-btn"
+      [class.is-active]="tabActiva() === 'entregas'"
+      (click)="tabActiva.set('entregas')"
+    >
+      Entregas
+    </button>
+  </nav>
+
+  @if (tabActiva() === 'catalogo') {
+    <app-catalogo
+      (alertaEmitida)="mostrarAlerta($event.tipo, $event.texto)"
+    />
+  }
+
+  @if (tabActiva() === 'solicitudes') {
+  <app-solicitudes
+    (alertaEmitida)="mostrarAlerta($event.tipo, $event.texto)"
+  />
+}
+
+@if (tabActiva() === 'entregas') {
+  <app-entregas
+    (alertaEmitida)="mostrarAlerta($event.tipo, $event.texto)"
+  />
+}
+</div>

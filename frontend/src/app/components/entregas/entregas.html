@@ -1,0 +1,62 @@
+<section class="card">
+  <div class="panel-head">
+    <div>
+      <span class="section-tag">Cierre del ciclo</span>
+      <h2>Entregas e intercambios</h2>
+    </div>
+
+    <button type="button" class="btn btn-outline" (click)="cargarEntregas()">
+      Refrescar
+    </button>
+  </div>
+
+  @if (entregas().length === 0) {
+    <p class="empty-state">No hay entregas creadas aún. Al aceptar una solicitud pendiente se genera una aquí.</p>
+  }
+
+  <div class="record-list">
+    @for (ent of entregas(); track ent.id) {
+      <article class="record-row">
+        <div class="record-top">
+          <strong class="record-title">
+            Entrega #{{ ent.id }} · {{ ent.tituloPublicacion || 'Publicación #' + ent.publicacionId }}
+          </strong>
+          <span
+            class="state-label"
+            [class.state-available]="ent.estado === 'COMPLETADA'"
+            [class.state-reserved]="ent.estado === 'PENDIENTE'"
+          >
+            {{ ent.estado }}
+          </span>
+        </div>
+
+        <p class="record-desc">
+          De <strong>{{ ent.nombrePropietario }}</strong> para <strong>{{ ent.nombreReceptor }}</strong>
+          @if (ent.modalidad) {
+            ({{ ent.modalidad }})
+          }
+        </p>
+
+        <div class="record-foot">
+          <span class="owner-label">
+            Artículo: <strong>{{ ent.estadoPublicacion }}</strong>
+            @if (ent.fechaEntrega) {
+              · Completada el {{ ent.fechaEntrega | date:'dd/MM/yyyy HH:mm' }}
+            }
+          </span>
+
+          @if (ent.estado === 'PENDIENTE') {
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="esUsuarioBloqueado()"
+              (click)="completarEntrega(ent.id)"
+            >
+              Marcar completada
+            </button>
+          }
+        </div>
+      </article>
+    }
+  </div>
+</section>

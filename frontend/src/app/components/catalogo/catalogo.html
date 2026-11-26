@@ -1,0 +1,142 @@
+<div class="catalog-layout">
+  <aside class="card compose-panel">
+    <span class="section-tag">Publicar</span>
+    <h2>Nuevo artículo</h2>
+    <p class="section-copy">Comparte materiales o propone un intercambio dentro del campus.</p>
+
+    <form (ngSubmit)="publicarItem()" class="stack-form">
+      <label>
+        <span>Título</span>
+        <input
+          type="text"
+          [(ngModel)]="nuevaPub.titulo"
+          name="titulo"
+          placeholder="Ej: Apuntes de Redes o Multímetro"
+          required
+        />
+      </label>
+
+      <label>
+        <span>Descripción</span>
+        <textarea
+          [(ngModel)]="nuevaPub.descripcion"
+          name="descripcion"
+          rows="3"
+          placeholder="Estado actual, accesorios incluidos y punto de entrega..."
+          required
+        ></textarea>
+      </label>
+
+      <div class="two-cols">
+        <label>
+          <span>Categoría</span>
+          <select [(ngModel)]="nuevaPub.categoria" name="categoria">
+            <option value="Apuntes">Apuntes</option>
+            <option value="Libros">Libros</option>
+            <option value="Electrónica">Electrónica</option>
+            <option value="Equipamiento">Equipamiento</option>
+            <option value="General">General</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Modalidad</span>
+          <select [(ngModel)]="nuevaPub.modalidad" name="modalidad">
+            <option value="DONACIÓN">DONACIÓN</option>
+            <option value="INTERCAMBIO">INTERCAMBIO</option>
+          </select>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="esUsuarioBloqueado()">
+        Publicar en el campus
+      </button>
+    </form>
+  </aside>
+
+  <section class="card feed-panel">
+    <div class="panel-head">
+      <div>
+        <span class="section-tag">Explorar</span>
+        <h2>Publicaciones del campus</h2>
+      </div>
+
+      <div class="filter-group">
+        <select [(ngModel)]="filtroEstadoPub" (ngModelChange)="cargarPublicaciones()">
+          <option value="">Estado: Todos</option>
+          <option value="DISPONIBLE">DISPONIBLE</option>
+          <option value="RESERVADA">RESERVADA</option>
+          <option value="ENTREGADA">ENTREGADA</option>
+        </select>
+
+        <select [(ngModel)]="filtroModalidadPub" (ngModelChange)="cargarPublicaciones()">
+          <option value="">Modalidad: Todas</option>
+          <option value="DONACIÓN">DONACIÓN</option>
+          <option value="INTERCAMBIO">INTERCAMBIO</option>
+        </select>
+      </div>
+    </div>
+
+    @if (publicaciones().length === 0) {
+      <p class="empty-state">No hay publicaciones que coincidan con los filtros actuales.</p>
+    }
+
+    <div class="record-list">
+      @for (pub of publicaciones(); track pub.id) {
+        <article class="record-row">
+          <div class="record-top">
+            <div class="chips">
+              <span class="chip chip-mode">{{ pub.modalidad }}</span>
+              <span class="chip chip-cat">{{ pub.categoria }}</span>
+            </div>
+
+            <span
+              class="state-label"
+              [class.state-available]="pub.estado === 'DISPONIBLE'"
+              [class.state-reserved]="pub.estado === 'RESERVADA'"
+              [class.state-done]="pub.estado === 'ENTREGADA'"
+            >
+              {{ pub.estado }}
+            </span>
+          </div>
+
+          <h3 class="record-title">{{ pub.titulo }}</h3>
+          <p class="record-desc">{{ pub.descripcion }}</p>
+
+          <div class="record-foot">
+            <span class="owner-label">
+              Propietario: <strong>{{ pub.nombrePropietario || 'Usuario #' + pub.usuarioId }}</strong>
+            </span>
+
+            @if (pub.estado === 'DISPONIBLE' && auth.usuarioActual()?.id !== pub.usuarioId) {
+              @if (publicacionSeleccionadaId() === pub.id) {
+                <div class="inline-request">
+                  <input
+                    type="text"
+                    [(ngModel)]="mensajeSolicitud"
+                    placeholder="Mensaje breve para coordinar..."
+                  />
+                  <button type="button" class="btn btn-primary" (click)="enviarSolicitud(pub.id)">
+                    Enviar
+                  </button>
+                  <button type="button" class="btn btn-outline" (click)="publicacionSeleccionadaId.set(null)">
+                    Cancelar
+                  </button>
+                </div>
+              } @else {
+                <button
+                  type="button"
+                  class="btn btn-accent"
+                  [disabled]="esUsuarioBloqueado()"
+                  (click)="abrirSolicitud(pub.id)"
+                >
+                  Solicitar
+                </button>
+              }
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+</div>

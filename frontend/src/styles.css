@@ -1,1 +1,213 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg-page: #f5f5f4;
+  --bg-surface: #ffffff;
+  --text-main: #1c1917;
+  --text-muted: #57534e;
+  --border-soft: #e7e5e4;
+  --brand: #14532d;
+  --brand-hover: #166534;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-main);
+}
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.stack-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stack-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+input,
+select,
+textarea {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #d6d3d1;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-family: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgba(20, 83, 45, 0.25);
+  border-color: var(--brand);
+}
+
+.btn {
+  padding: 0.65rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.92rem;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--brand);
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--brand-hover);
+}
+
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.alert-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+/* Estilos compartidos para listados y registros (Catálogo, Solicitudes, Entregas) */
+.section-tag {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--brand);
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.panel-head h2 {
+  margin: 0.15rem 0 0;
+  font-size: 1.2rem;
+}
+
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.record-row {
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 1rem 1.15rem;
+  background: #fafaf9;
+}
+
+.record-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.chips {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  background: #e7e5e4;
+  color: var(--text-main);
+}
+
+.state-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+}
+
+.state-available {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.state-reserved {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.state-done {
+  background: #e7e5e4;
+  color: #44403c;
+}
+
+.state-danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.record-title {
+  margin: 0.2rem 0;
+  font-size: 1rem;
+}
+
+.record-desc {
+  margin: 0.35rem 0 0.85rem;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+
+.record-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.owner-label {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.empty-state {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  padding: 1rem 0;
+}

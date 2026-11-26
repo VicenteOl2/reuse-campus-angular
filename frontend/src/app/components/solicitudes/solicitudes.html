@@ -1,0 +1,59 @@
+<section class="card">
+  <div class="panel-head">
+    <div>
+      <span class="section-tag">Interés y acuerdos</span>
+      <h2>Solicitudes registradas</h2>
+    </div>
+
+    <select [(ngModel)]="filtroEstadoSol" (ngModelChange)="cargarSolicitudes()">
+      <option value="">Estado: Todas</option>
+      <option value="PENDIENTE">PENDIENTE</option>
+      <option value="ACEPTADA">ACEPTADA</option>
+      <option value="RECHAZADA">RECHAZADA</option>
+    </select>
+  </div>
+
+  @if (solicitudes().length === 0) {
+    <p class="empty-state">Todavía no hay solicitudes con este filtro.</p>
+  }
+
+  <div class="record-list">
+    @for (sol of solicitudes(); track sol.id) {
+      <article class="record-row">
+        <div class="record-top">
+          <strong class="record-title">
+            #{{ sol.id }} · {{ sol.tituloPublicacion || 'Publicación #' + sol.publicacionId }}
+          </strong>
+          <span
+            class="state-label"
+            [class.state-available]="sol.estado === 'ACEPTADA'"
+            [class.state-reserved]="sol.estado === 'PENDIENTE'"
+            [class.state-danger]="sol.estado === 'RECHAZADA'"
+          >
+            {{ sol.estado }}
+          </span>
+        </div>
+
+        <p class="record-desc">“{{ sol.mensaje }}”</p>
+
+        <div class="record-foot">
+          <span class="owner-label">
+            Solicitante: <strong>{{ sol.nombreSolicitante || 'Usuario #' + sol.solicitanteId }}</strong>
+            · Dueño: <strong>{{ sol.nombrePropietario || 'Usuario #' + sol.propietarioId }}</strong>
+          </span>
+
+          @if (sol.estado === 'PENDIENTE' && auth.usuarioActual()?.id === sol.propietarioId) {
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="esUsuarioBloqueado()"
+              (click)="aceptarSolicitud(sol.id)"
+            >
+              Aceptar y reservar
+            </button>
+          }
+        </div>
+      </article>
+    }
+  </div>
+</section>

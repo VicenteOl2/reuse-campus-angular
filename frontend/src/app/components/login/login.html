@@ -1,0 +1,41 @@
+<section class="login-page">
+  <div class="card login-card">
+    <span class="eyebrow">ReUse Campus</span>
+    <h2>Iniciar sesión</h2>
+    <p class="helper">Ingresa con tu correo institucional y contraseña.</p>
+
+    @if (errorMsg()) {
+      <div class="alert alert-error">
+        {{ errorMsg() }}
+      </div>
+    }
+
+    <form (ngSubmit)="submitLogin()" class="stack-form">
+      <label>
+        <span>Correo</span>
+        <input
+          type="email"
+          [(ngModel)]="correo"
+          name="correo"
+          placeholder="nombre@campus.cl"
+          required
+        />
+      </label>
+
+      <label>
+        <span>Contraseña</span>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="••••••••"
+          required
+        />
+      </label>
+
+      <button type="submit" class="btn btn-primary" [disabled]="enviando()">
+        {{ enviando() ? 'Ingresando...' : 'Entrar' }}
+      </button>
+    </form>
+  </div>
+</section>
